@@ -550,11 +550,12 @@ type SliderThumbImplElement = React.ComponentRef<typeof Primitive.span>;
 interface SliderThumbImplProps extends PrimitiveSpanProps {
   index: number;
   name?: string;
+  thumbOffset?: boolean;
 }
 
 const SliderThumbImpl = React.forwardRef<SliderThumbImplElement, SliderThumbImplProps>(
   (props: ScopedProps<SliderThumbImplProps>, forwardedRef) => {
-    const { __scopeSlider, index, name, ...thumbProps } = props;
+    const { __scopeSlider, index, name, thumbOffset = true, ...thumbProps } = props;
     const context = useSliderContext(THUMB_NAME, __scopeSlider);
     const orientation = useSliderOrientationContext(THUMB_NAME, __scopeSlider);
     const [thumb, setThumb] = React.useState<HTMLSpanElement | null>(null);
@@ -586,7 +587,7 @@ const SliderThumbImpl = React.forwardRef<SliderThumbImplElement, SliderThumbImpl
         style={{
           transform: 'var(--radix-slider-thumb-transform)',
           position: 'absolute',
-          [orientation.startEdge]: `calc(${percent}% + ${thumbInBoundsOffset}px)`,
+          [orientation.startEdge]: `calc(${percent}% + ${thumbOffset ? thumbInBoundsOffset : 0}px)`,
         }}
       >
         <Collection.ItemSlot scope={props.__scopeSlider}>
